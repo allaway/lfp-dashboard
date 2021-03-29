@@ -11,7 +11,7 @@ filter_dataset <- function(dataset, start_date, end_date, regions){
 calculate_most_empty <- function(df, n_pantries = 10, dir = c("empty","full")){
   df <- dplyr::select(df, timestamp, address, amount_at_arrival) %>% 
     dplyr::group_by(address) %>% 
-    dplyr::summarize(fullness = mean(amount_at_arrival)) %>% 
+    dplyr::summarize(fullness = round(mean(amount_at_arrival),2)) %>% 
     dplyr::arrange(fullness) %>% 
     dplyr::ungroup() %>% 
     purrr::set_names(c("Address", "Fullness (1-5)"))
