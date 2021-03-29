@@ -1,10 +1,11 @@
-filter_dataset <- function(dataset, start_date, end_date){
+filter_dataset <- function(dataset, start_date, end_date, regions){
   
   date_inclusive <- (as.POSIXct(end_date) + lubridate::days(1) - lubridate::seconds(1))
   
   dplyr::filter(dataset, 
                 timestamp >= as.POSIXct(start_date) & 
-                  timestamp <= date_inclusive)
+                  timestamp <= date_inclusive &
+                region %in% regions)
 }
 
 calculate_most_empty <- function(df, n_pantries = 10, dir = c("empty","full")){
@@ -15,21 +16,25 @@ calculate_most_empty <- function(df, n_pantries = 10, dir = c("empty","full")){
     dplyr::ungroup() %>% 
     purrr::set_names(c("Address", "Fullness (1-5)"))
   
-  print(df)
-  
   if(dir == "empty"){
     dplyr::slice_head(df, n={{n_pantries}})
   }else if(dir == "full"){
-    dplyr::slice_tail(df, n={{n_pantries}})
+    dplyr::slice_tail(df, n={{n_pantries}}) %>% 
+      dplyr::arrange(dplyr::desc(`Fullness (1-5)`))
+      
   }
 }
 
-calculate_most_needed_categories <- function(input_vector){
+split_most_needed_categories <- function(input_vector){
   input_vector %>% 
     stringr::str_split(pattern = ", ") %>% 
     simplify() %>% 
     table() %>% 
-    dplyr::as_data_frame() %>%
+    dplyr::as_data_frame()
+}
+
+calculate_most_needed_categories <- function(input_vector){
+  split_most_needed_categories(input_vector) %>% 
     dplyr::slice_max(order_by = "n") %>% 
     purrr::pluck(".") %>% 
     stringr::str_c(sep = ", ", collapse = ", ")
@@ -63,7 +68,7 @@ plot_pantry_volume <- function(pantry_data, include_amount_at_departure = F){
   
   ggplot(data = df, aes(x = timestamp, y = amount)) + 
     geom_line(color="#48639c") +
-    geom_area(fill="#48639c", alpha = 0.6, orientation = "x") +
+    geom_area(fill="#48639c", alpha = 1, orientation = "x") +
     geom_point(color="#48639c") +
     ylim(0,5) +
     theme_bw() +

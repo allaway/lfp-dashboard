@@ -5,8 +5,8 @@ account: roba
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3876157
-bundleId: 4405354
+bundleId: 4405359
 url: https://roba.shinyapps.io/lfp-dashboard/
-when: 1616971334.94979
+when: 1616971569.10454
 asMultiple: FALSE
 asStatic: FALSE

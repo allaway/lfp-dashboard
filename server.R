@@ -1,8 +1,18 @@
 server <- function(input, output, session) {
   
+  w <- Waiter$new(id = c("most_empty", "most_full", "map", "pantry_volume", "pantry_feedback", "pantry_needs"))
+  
   ## overview tab
   filtered_data <- reactive({
-    filter_dataset(raw_report_data, start_date = input$daterange[1], end_date = input$daterange[2])
+    
+    validate(
+      need(input$daterange[1]<input$daterange[2], 'The selected start date must be before the selected end date.')
+    )
+    
+    filter_dataset(raw_report_data, 
+                   start_date = input$daterange[1], 
+                   end_date = input$daterange[2],
+                   regions = input$selected_regions)
   })
   
   output$most_empty <- renderReactable({
@@ -56,6 +66,17 @@ server <- function(input, output, session) {
   output$pantry_feedback <- renderReactable({
     pantry_feedback(filtered_data(), address = input$address) %>% 
       reactable()
+  })
+  
+  output$pantry_needs <- renderPlot({
+    pantry_data() %>% 
+      purrr::pluck("need_list") %>% 
+      split_most_needed_categories() %>% 
+      ggplot(aes(x = ., y = n, fill = .)) +
+      geom_bar(stat = "identity") + 
+      labs(x = "Categories", y = "Number of reports") +
+      theme_bw() +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
   })
   
 }
