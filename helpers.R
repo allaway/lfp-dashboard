@@ -25,6 +25,38 @@ calculate_most_empty <- function(df, n_pantries = 10, dir = c("empty","full")){
   }
 }
 
+plot_pantry_visits <- function(df){
+  
+  visit_df <- df %>% 
+    dplyr::group_by(address, region) %>% 
+    dplyr::tally(name = "visits")
+  
+   ggplot(visit_df, aes(x = forcats::fct_reorder(address,visits,.desc=T), y = visits, fill = region)) +
+     geom_bar(stat = "identity") +
+     theme_bw() +
+     theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
+           text = element_text(size = 15)) +
+     labs(x = "Location", y = "Number of visits")
+       
+}
+
+plot_regional_fullness <- function(df){
+  
+  visit_df <- df %>% 
+    dplyr::group_by(address) %>% 
+    dplyr::slice_max(timestamp) 
+  
+  ggplot(visit_df, aes(x =  forcats::fct_reorder(address,amount_at_arrival,.desc=T), y = amount_at_arrival, fill = region)) +
+    geom_bar(stat = "identity") +
+    theme_bw() +
+    theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
+          text = element_text(size = 15)) +
+    labs(x = "Region", y = "Fullness") +
+    facet_wrap(~region, scales = "free_x")
+  
+}
+
+
 split_most_needed_categories <- function(input_vector){
   input_vector %>% 
     stringr::str_split(pattern = ", ") %>% 
@@ -72,6 +104,7 @@ plot_pantry_volume <- function(pantry_data, include_amount_at_departure = F){
     geom_point(color="#48639c") +
     ylim(0,5) +
     theme_bw() +
+    theme(text = element_text(size = 15)) +
     labs(x = "Date", y = "Fullness (1-5)")
 }
 

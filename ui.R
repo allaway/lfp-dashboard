@@ -8,8 +8,15 @@ dashboardPage(skin = "purple",
       dateRangeInput("daterange", "Date range:",
                      start = todays_date-lubridate::days(60),
                      end = todays_date),
-      shinyWidgets::prettyCheckboxGroup("selected_regions", "Filter by region:", 
-                                   choices = sort(regions), selected = regions, bigger = T)
+      # shinyWidgets::prettyCheckboxGroup("selected_regions", "Filter by region:", 
+      #                              choices = sort(regions), selected = regions, bigger = T)
+      pickerInput("selected_regions", "Filter by region:", 
+                  choices = sort(regions), selected = regions, multiple = T,
+                  options = list(
+                    `actions-box` = TRUE,
+                    size = 10,
+                    `selected-text-format` = "count > 3"
+                  ))
     )
   ),
   dashboardBody(
@@ -26,11 +33,21 @@ dashboardPage(skin = "purple",
                 )
               ),
               fluidRow(
-                box(title = "Most empty pantries:",
+                box(title = "Regional Fullness", width = 12,
+                    em("This graph shows the most recent measurement for each pantry within each region and your selected filters."), 
+                    plotlyOutput("fullness_plot"),
+                ),
+                box(title = "Emptiest pantries", width = 6,
+                    em("This table shows emptiest pantries within your selected filters."), 
                   reactableOutput("most_empty")
                   ),
-                box(title = "Most full pantries:",
+                box(title = "Fullest pantries", width = 6,
+                   em("This table shows fullest pantries within your selected filters."), 
                   reactableOutput("most_full")
+                ),
+                box(title = "Most visited pantries:", width = 12,
+                    em("This graph shows the most visited pantries within your selected filters."), 
+                    plotlyOutput("visit_plot")
                 )
               )),
       tabItem("map",

@@ -21,6 +21,7 @@ source("helpers.R")
 #f7996e
 
 googlesheets4::gs4_deauth()
+pantry_metadata <- googlesheets4::read_sheet("1iXcz098Cc_RGejIq97JUK0Rj1oDw2QolF5_bNRlG4e4") 
 
 todays_date <- as.POSIXct(Sys.Date())
 
@@ -44,7 +45,6 @@ all_reports_count <- raw_report_data %>% nrow()
 pantries <- raw_report_data$address %>% unique()
 pantry_count <- pantries %>% length()
 
-pantry_metadata <- googlesheets4::read_sheet("1iXcz098Cc_RGejIq97JUK0Rj1oDw2QolF5_bNRlG4e4") 
 
   
 

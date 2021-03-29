@@ -6,7 +6,8 @@ server <- function(input, output, session) {
   filtered_data <- reactive({
 
     validate(
-      need(input$daterange[1]<input$daterange[2], 'The selected start date must be before the selected end date.')
+      need(input$daterange[1]<input$daterange[2], 'The selected start date must be before the selected end date.'),
+      need(length(input$selected_regions)>0, "Must select at least one region.")
     )
     
     filter_dataset(raw_report_data, 
@@ -23,6 +24,16 @@ server <- function(input, output, session) {
   output$most_full <- renderReactable({
     df <- calculate_most_empty(filtered_data(), dir = "full")
     reactable(df)
+  })
+  
+  output$visit_plot <- renderPlotly({
+    plt <- plot_pantry_visits(filtered_data())
+    ggplotly(plt)
+  })
+  
+  output$fullness_plot <- renderPlotly({
+    plt <- plot_regional_fullness(filtered_data())
+    ggplotly(plt)
   })
   
   ## map tab
@@ -78,7 +89,8 @@ server <- function(input, output, session) {
       geom_bar(stat = "identity") + 
       labs(x = "Categories", y = "Number of reports") +
       theme_bw() +
-      theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+      theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+            text = element_text(size = 15))
   })
   
 }
