@@ -1,10 +1,10 @@
 server <- function(input, output, session) {
   
-  w <- Waiter$new(id = c("most_empty", "most_full", "map", "pantry_volume", "pantry_feedback", "pantry_needs"))
+  w <- Waiter$new(id = c("pantry_volume", "pantry_feedback", "pantry_needs"))
   
   ## overview tab
   filtered_data <- reactive({
-    
+
     validate(
       need(input$daterange[1]<input$daterange[2], 'The selected start date must be before the selected end date.')
     )
@@ -32,7 +32,6 @@ server <- function(input, output, session) {
   })
   
   output$map <- renderLeaflet({
-    
     df <- pantry_locations %>% 
       dplyr::inner_join(pantry_summary_data()) %>%  
       dplyr::group_by(address) %>% 
@@ -60,15 +59,18 @@ server <- function(input, output, session) {
   })
   
   output$pantry_volume <- renderPlot({
+    w$show()
     plot_pantry_volume(pantry_data(), include_amount_at_departure = T)
   })
   
   output$pantry_feedback <- renderReactable({
+    w$show()
     pantry_feedback(filtered_data(), address = input$address) %>% 
       reactable()
   })
   
   output$pantry_needs <- renderPlot({
+    w$show()
     pantry_data() %>% 
       purrr::pluck("need_list") %>% 
       split_most_needed_categories() %>% 
