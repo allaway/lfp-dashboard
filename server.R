@@ -28,12 +28,12 @@ server <- function(input, output, session) {
   
   output$visit_plot <- renderPlotly({
     plt <- plot_pantry_visits(filtered_data())
-    ggplotly(plt)
+    ggplotly(plt, tooltip = c("label"))
   })
   
   output$fullness_plot <- renderPlotly({
     plt <- plot_regional_fullness(filtered_data())
-    ggplotly(plt)
+    ggplotly(plt, tooltip = c("label"))
   })
   
   ## map tab

@@ -31,7 +31,10 @@ plot_pantry_visits <- function(df){
     dplyr::group_by(address, region) %>% 
     dplyr::tally(name = "visits")
   
-   ggplot(visit_df, aes(x = forcats::fct_reorder(address,visits,.desc=T), y = visits, fill = region)) +
+   ggplot(visit_df, aes(x = forcats::fct_reorder(address,visits,.desc=T), 
+                        y = visits,
+                        fill = region, 
+                        label = address)) +
      geom_bar(stat = "identity") +
      theme_bw() +
      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
@@ -46,7 +49,10 @@ plot_regional_fullness <- function(df){
     dplyr::group_by(address) %>% 
     dplyr::slice_max(timestamp) 
   
-  ggplot(visit_df, aes(x =  forcats::fct_reorder(address,amount_at_arrival,.desc=T), y = amount_at_arrival, fill = region)) +
+  ggplot(visit_df, aes(x =  forcats::fct_reorder(address,amount_at_arrival,.desc=T),
+                       y = amount_at_arrival, 
+                       fill = region,
+                       label = address)) +
     geom_bar(stat = "identity") +
     theme_bw() +
     theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
@@ -67,7 +73,7 @@ split_most_needed_categories <- function(input_vector){
 
 calculate_most_needed_categories <- function(input_vector){
   split_most_needed_categories(input_vector) %>% 
-    dplyr::slice_max(order_by = "n") %>% 
+    dplyr::slice_max(order_by = n) %>% 
     purrr::pluck(".") %>% 
     stringr::str_c(sep = ", ", collapse = ", ")
 }
