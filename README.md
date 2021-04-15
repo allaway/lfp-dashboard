@@ -12,11 +12,11 @@ Both of these sheets are anonymously viewable.
 ## How tos
 * How to modify a pantry address: 
 
-First, change the address in the [Addresses google sheet](https://docs.google.com/spreadsheets/u/1/d/1iXcz098Cc_RGejIq97JUK0Rj1oDw2QolF5_bNRlG4e4/edit#gid=0). Then, go to the survey/reporting data, and recode all of the records with the previous address (what you changed from) to the new address (what you changed it to). If this second step is not done, the old records will no longer show up in the app. 
+First, change the address in the [Addresses google sheet](https://docs.google.com/spreadsheets/u/1/d/1iXcz098Cc_RGejIq97JUK0Rj1oDw2QolF5_bNRlG4e4/edit#gid=0). Then, go to the survey/reporting data, and recode all of the records with the previous address (what you changed from) to the new address (what you changed it to). If this second step is not done, the old records will no longer show up in the app. Finally, change the address value in the data collection survey to match the new value. 
 
 * How to add a new pantry: 
 
-First, check the current list to be 100% sure you are not adding a duplicate address with a slightly different format. Add the address in the [Addresses google sheet](https://docs.google.com/spreadsheets/u/1/d/1iXcz098Cc_RGejIq97JUK0Rj1oDw2QolF5_bNRlG4e4/edit#gid=0). Make sure to assign a Neighborhood and a Region using the dropdowns. 
+First, check the current list to be 100% sure you are not adding a duplicate address with a slightly different format. Add the address in the [Addresses google sheet](https://docs.google.com/spreadsheets/u/1/d/1iXcz098Cc_RGejIq97JUK0Rj1oDw2QolF5_bNRlG4e4/edit#gid=0). Make sure to assign a Neighborhood and a Region using the dropdowns. Additionally, add the new address value in the data collection survey.
 
 * How to add a new region or neighborhood: 
 
